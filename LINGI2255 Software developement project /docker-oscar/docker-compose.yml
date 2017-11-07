@@ -1,0 +1,60 @@
+---
+
+version: '2'
+
+services:
+
+    oscar:
+        build:
+            context: ./oscar
+            dockerfile: Dockerfile
+        image: 3mpr/oscar:0.2
+        container_name: oscar
+        hostname: oscar
+        restart: on-failure
+        ports: 
+            - "8000:8000"
+        volumes: 
+            - oscar:/usr/src/oscar
+        networks:
+            eureduka:
+                ipv4_address: 10.0.0.10
+        depends_on: 
+            - postgres
+        environment:
+            POSTGRES_HOST: 10.0.0.20
+        stdin_open: true
+        tty: true
+        
+    postgres:
+        image: postgres:10-alpine
+        container_name: database
+        hostname: database
+        restart: on-failure
+        volumes:
+            - ./postgres/data:/var/lib/postgresql
+        environment:
+            POSTGRES_DB: oscar
+            POSTGRES_USER: oscar
+            POSTGRES_PASSWORD: oscar
+            PG_DATA: /var/lib/postgresql/data/pgdata
+        networks:
+            eureduka:
+                ipv4_address: 10.0.0.20
+
+
+networks:
+    eureduka:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 10.0.0.0/24
+                  ip_range: 10.0.0.0/24
+                  gateway: 10.0.0.254
+
+volumes:
+    oscar:
+        driver: local-persist
+        driver_opts:
+            mountpoint: "$PWD/oscar/oscareducation"

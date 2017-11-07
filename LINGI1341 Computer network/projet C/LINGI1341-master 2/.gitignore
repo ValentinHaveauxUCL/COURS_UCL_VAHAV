@@ -1,0 +1,10 @@
+#mac files#
+*.DS_Store
+
+*.o
+
+sender
+
+receiver
+
+test

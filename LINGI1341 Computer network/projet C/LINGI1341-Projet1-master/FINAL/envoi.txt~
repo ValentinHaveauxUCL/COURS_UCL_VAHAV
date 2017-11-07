@@ -1,0 +1,443 @@
+
+#include "socket.h"
+#include "packet.h"
+#define TIME 5
+#define WINDOW_NBR 5
+#define PACKET_MAX_SIZE 520
+#define PAYLOAD_MAX_SIZE 512
+#define MAXSEQNUM 255
+
+typedef struct Time{
+	int sec;
+	int micro;
+} Time;
+
+typedef struct Timer{
+	struct timeval *timer_t;
+	int seqnum;
+} Timer;
+	Timer *timer_buffer[WINDOW_NBR];
+	char *hostname;
+	int port;
+	int check_file;
+	const char *filename;
+	int backup_STDOUT;
+	char *packet_buffer;
+	pkt_t *window[WINDOW_NBR];
+	int dernierenvoi;
+	int full;
+	int debutwindow;
+	int indexwindow;
+	int fd_filer;
+	int fd_f;
+	int back;
+	int index_n;
+	int index_offset;
+	int checking;
+	int send_count;
+	int end_start;
+	int last_timer_setup;
+	
+
+Time getTime(struct timeval start, struct timeval stop){
+	int dMicro = stop.tv_usec - start.tv_usec;
+	int dSec = stop.tv_sec - start.tv_sec;
+	int sec;
+	int micro;
+	if(dMicro<0){
+		sec = dSec -1;
+		micro = 1000000+dMicro;
+	} else {
+		sec = dSec;
+		micro = dMicro;
+	}
+	Time retour = {sec, micro};
+	return retour;
+	
+}
+
+void init(){
+	end_start = TRUE;
+	last_timer_setup = -1;
+	fd_filer=0;
+	fd_filer=0;
+	fd_f=0;
+	back=0;
+	index_n=0;
+	index_offset = 0;
+	checking =0;
+	send_count = 0;
+	hostname = malloc(40*sizeof(char));
+	packet_buffer = malloc(PACKET_MAX_SIZE*sizeof(char));
+	strcpy(hostname, "::");
+	port = 0;
+	check_file = 0;
+	filename = NULL;
+	backup_STDOUT=0;
+	full=WINDOW_NBR; // Permet de savoir si on peut envoyer des nouveaux packets
+	debutwindow=0; //Permet de dire ou commence la window
+	dernierenvoi=-1; //permet de dire quel est le numéro de séquence du dernier
+			//packet envoyé
+	indexwindow=0; //Permet de dire à quelle index commence la séquence d'envois
+}
+
+int check_for_timer(){
+	int retour=-1;
+	int i;
+	printf("IN\n");
+	struct timeval *now;
+	gettimeofday(now, NULL);
+	for(i=0;i<WINDOW_NBR;i++){
+		if(timer_buffer[i]!=NULL){
+			printf("In2\n");
+			Time div = getTime((*(*(timer_buffer[i])).timer_t), *now);
+			printf("In3\n");
+			if(div.sec>=TIME){
+				printf("TIMEOUT[%d]\n",(*(timer_buffer[i])).seqnum);
+				last_timer_setup = (*(timer_buffer[i])).seqnum;
+				return (*(timer_buffer[i])).seqnum;
+			}
+		}
+	}
+	return -1;
+}
+
+void free_r(){
+	free(hostname);
+	free(packet_buffer);
+}
+
+int look_for_seq_buffer(int seqnum, int a, int b){
+	//printf("Look [a:%d,b:%d]=>%d\n",a,b,seqnum);
+	if(a==b){
+		if(window[a]!= NULL && (*(window[a])).myseqnum==seqnum){
+			return a;
+		}
+	} else {
+	int i;
+	int retour=-1;
+	for(i=a;i<b;i++){
+		if(window[i]!= NULL && (*(window[i])).myseqnum==seqnum){
+			retour=i;
+		}
+	}
+	return retour;
+	}
+}
+
+void ack_to_seq_buffer(int seqnum, int a, int b){
+	//printf("ACK_S[%d]...",seqnum);
+	if(a==b){
+		if(window[a]!= NULL && (*(window[a])).myseqnum<=seqnum){
+			free(window[a]);
+			free(timer_buffer[a]);
+			window[a]=NULL;
+			checking--;
+			send_count--;
+		}
+	} else {
+	int i;
+	int save = index_n-1;
+	for(i=a;i<b;i++){
+		if(window[i]!= NULL && (*(window[i])).myseqnum<=seqnum){
+			//printf("FOR[%d at window[%d]]...",(*(window[i])).myseqnum,i);
+			free(window[i]);
+			free(timer_buffer[i]);
+			window[i]=NULL;
+			checking--;
+			send_count--;
+			save = i;
+		}
+	}
+	index_n=save+1;
+	if(index_n>WINDOW_NBR){
+		index_n=0;
+	}
+	}
+	//printf("DONE![end:%d  send_c:%d]\n",end_start, send_count);
+}
+
+void send_data(int fd_socket){
+	//Structure de timer
+	struct timeval *timer = malloc(sizeof(struct timeval));
+	timer->tv_sec=TIME;
+	timer->tv_usec=0;
+	
+	//Assignation au set de descripteurs
+	fd_set *lecture;
+	lecture = malloc(sizeof(*lecture));
+	FD_ZERO(lecture);
+	FD_SET(fd_socket, lecture);
+	
+	//Lecture sur le socket
+	int nseq_wait;
+	int MIN_w = 0;
+	int MAX_w = MIN_w + WINDOW_NBR;
+	int nseq_offset =0;
+	int boolean = TRUE;
+	int length;
+	int buffreceiver = WINDOW_NBR; //nombre de place libre dans le buffer du receiver
+	int boolean_end = FALSE;
+	while(boolean){
+		int seq_po = check_for_timer();
+		if(seq_po>0){
+			int index_tmp = look_for_seq_buffer(seq_po, 0, WINDOW_NBR);
+			if(window[index_tmp]!=NULL){//Corruption du num de séquence dans l'acquis 
+			char *tabl = malloc(PACKET_MAX_SIZE*sizeof(char));
+			size_t mylong=(size_t) PACKET_MAX_SIZE;
+			pkt_encode((const pkt_t *) window[index_tmp],(char *) tabl,(size_t *) &mylong);
+			gettimeofday((timer_buffer[last_timer_setup])->timer_t, NULL);
+			write(fd_socket,(void *)tabl,mylong);
+			free(tabl);
+			}	
+		}
+
+		pkt_t *pkt = pkt_new();
+		//Réinitialisation du timer
+		timer->tv_sec=TIME;
+		FD_ZERO(lecture);
+		FD_SET(fd_socket, lecture);
+
+		int timer_check = select(fd_socket+1,lecture,NULL,NULL,timer);
+		if(timer_check>0){
+			if(FD_ISSET(fd_socket, lecture)){
+				//recuperation de la longueur lue
+				length = read(fd_socket, (void *) packet_buffer, PACKET_MAX_SIZE);
+
+				//decodage du packet
+				if(length>0){
+					pkt_status_code retour = pkt_decode((const char *) packet_buffer, (const size_t) length, pkt);
+					if(retour==PKT_OK){
+						buffreceiver = (int) (*pkt).mywindow;
+						//Ack ou Nack?
+						if((*pkt).mytype==PTYPE_ACK){
+							//printf("ACK[%d]\n",(*pkt).myseqnum);
+							timer->tv_sec=TIME; //reinitialise le timer
+							if(index_n==0 && index_offset==WINDOW_NBR-1){
+								index_offset=0;
+							}
+							ack_to_seq_buffer((*pkt).myseqnum -1, 0,WINDOW_NBR);
+							if((*pkt).myseqnum -1 == MIN_w){
+								MIN_w++;
+								MAX_w++;
+								
+								if(MAX_w>MAXSEQNUM){
+								MAX_w=0;
+								}
+								if(MIN_w>MAXSEQNUM){
+								MIN_w=0;
+								}
+							}
+		
+						}
+	
+						if((*pkt).mytype==PTYPE_NACK){
+							//printf("NACK[%d]\n",(*pkt).myseqnum);
+							int index_temp=0;
+							index_temp= look_for_seq_buffer((*pkt).myseqnum, 0, WINDOW_NBR);
+							if(window[index_temp]!=NULL){//Corruption du num de séquence dans l'acquis 
+								char *tab = malloc(PACKET_MAX_SIZE*sizeof(char));
+								size_t mylength=(size_t) PACKET_MAX_SIZE;
+								pkt_encode((const pkt_t *) window[index_temp],(char *) tab,(size_t *) &mylength);
+								gettimeofday((timer_buffer[last_timer_setup])->timer_t, NULL); //reinitialise le timer
+								write(fd_socket,(void *)tab,mylength);
+								free(tab);
+							}					
+						}
+					}
+						if(!end_start && send_count==0){
+							boolean=FALSE;
+						}
+				}
+					
+					
+			}
+
+		}
+		if(checking != WINDOW_NBR && end_start){//envoi possible de packet
+				buffreceiver--;
+				pkt_t *newpkt = pkt_new();
+				Timer *time = malloc(sizeof(Timer));
+				char *buff = malloc(PAYLOAD_MAX_SIZE*sizeof(char));				 
+				int length = read(fd_filer, (void *) buff, PAYLOAD_MAX_SIZE);
+				if(length==0){//histoire de pas envoyer deux fois un
+					//packet avec une length=0
+					end_start=FALSE;
+					free(newpkt);
+				}
+				else{
+					if(length<PAYLOAD_MAX_SIZE){ //fin du fichier
+						boolean_end=TRUE;}
+					if(buff[length-1]==EOF){
+						boolean_end=TRUE;
+					}
+					dernierenvoi++;
+					//assignation des paramètre correspondant à la structure & insertion de la structure dans le buffer
+ 
+					newpkt->mydata = buff;
+					(*newpkt).mytype=PTYPE_DATA;
+					(*newpkt).mywindow=0;
+					(*newpkt).myseqnum=dernierenvoi;
+					(*newpkt).mylength=length;		
+
+					window[index_offset]=newpkt;
+					timer_buffer[index_offset] = time;
+					gettimeofday((timer_buffer[index_offset])->timer_t, NULL);
+					printf("SET [%d] IN window[%d] LEN=%d\n",dernierenvoi,index_offset,(*newpkt).mylength);
+					//envoi du packet encodé 				
+					char tab[PACKET_MAX_SIZE];
+					size_t mylength=(size_t) PACKET_MAX_SIZE;
+					int ss = (int) pkt_encode((const pkt_t *) window[index_offset],(char *) tab, (size_t *) &mylength);
+
+					
+					write(fd_socket,(void *)tab,mylength);
+					timer->tv_sec=TIME; //reinitialise le timer
+					checking++;
+					send_count++;
+					if(!(index_offset +1>=WINDOW_NBR)){
+						index_offset++;
+					} else {
+						if(index_n!=0)
+						index_offset=0;
+					}
+
+					if(boolean_end){
+						pkt_t *newpkt = pkt_new();
+						Timer *time = malloc(sizeof(Timer));
+						dernierenvoi++;
+						newpkt->mydata = buff;
+						(*newpkt).mytype=PTYPE_DATA;
+						(*newpkt).mywindow=0;
+						(*newpkt).myseqnum=dernierenvoi;
+						(*newpkt).mylength=0;
+
+						window[index_offset]=newpkt;
+						timer_buffer[index_offset] = time;
+						gettimeofday((timer_buffer[index_offset])->timer_t, NULL);
+						//printf("SET [%d] IN window[%d] LEN=%d\n",dernierenvoi,index_offset,(*newpkt).mylength);
+						char tab[PACKET_MAX_SIZE];
+						size_t mylength=(size_t) PACKET_MAX_SIZE;
+						int ss = (int) pkt_encode((const pkt_t *) window[index_offset],(char *) tab, (size_t *) &mylength);
+
+					
+						write(fd_socket,(void *)tab,mylength);
+						timer->tv_sec=TIME; //reinitialise le timer
+						checking++;
+						send_count++;
+						if(!(index_offset +1>=WINDOW_NBR)){
+							index_offset++;
+						} else {
+							if(index_n!=0)
+							index_offset=0;
+						}
+						end_start=FALSE;
+					}
+					free(buff);
+					
+				}
+		}
+	}
+	
+	//free
+	free(timer);
+	free(lecture);
+}
+
+int main(int argc, const char *argv[]){
+	//initialisation	
+	init();
+	
+	//recherche des différentes données sur les paramètres
+	int i;
+	for(i=1;i<argc;i++){
+		if(strcmp("-f",argv[i])==0 && argc>=i+1){
+			filename = argv[i+1];
+			check_file = 1;
+			i++;
+		}
+		else if(strcmp("--filename",argv[i])==0 && argc>=i+1){
+			filename = argv[i+1];
+			check_file = 1;
+			i++;
+		}
+		else{
+			int test_port = atoi(argv[i]);
+			if(test_port!=0){
+				port = test_port;
+			} else {
+				strcpy(hostname, argv[i]);
+			}
+		}
+	}
+
+	//Vérification des paramètres
+	if(port==0){
+		const char *err = "Error: Invalid port number parameter! Please enter a valid port number.\n";
+		write(STDERR_FILENO, err, strlen(err));
+	}
+	
+	//Récupération de l'adresse réelle IPv6
+	struct sockaddr_in6 *serv_addr;
+	
+	struct sockaddr_in6 *local_addr;
+
+	local_addr = malloc(sizeof(*local_addr));
+	serv_addr = malloc(sizeof(*serv_addr));
+	const char *ret = real_address(hostname, serv_addr);
+	char *yolo = malloc(3*sizeof(char));
+	strcpy(yolo,"::1");
+	const char *ret1 = real_address(yolo, local_addr);
+	char *def = malloc(3*sizeof(char));
+	strcpy(def,"::1");
+	
+	if(ret!=NULL){
+		write(STDERR_FILENO, ret, strlen(ret));
+		exit(1);
+	}
+
+	const char *ph1 = "Connexion...";
+	write(STDOUT_FILENO, ph1, strlen(ph1));
+	//Création du socket
+	int socket_client = create_socket(local_addr,10000,serv_addr, port);
+	if(socket_client==-1){
+		exit(-1);
+	}
+
+	const char *ph2 = "Done!\nSending file...";
+	write(STDOUT_FILENO, ph2, strlen(ph2));
+
+	//Redirection de stdin
+	if(check_file==1){
+	fd_f = open(filename,O_RDWR, NULL);
+	if(fd_f==-1){
+		char *log = "Error: unable to read in the file\n";
+		write(STDERR_FILENO,log, strlen(log));
+		exit(1);
+	}
+	back = dup(STDIN_FILENO);
+	fd_filer = dup2(fd_f, STDIN_FILENO);
+	}
+	
+	//Envoi
+	send_data(socket_client);
+
+	//Backup
+	if(check_file==1){
+		dup2(back, STDIN_FILENO);
+		close(fd_f);
+	}
+
+	const char *ph3="Done!\n";
+	write(STDOUT_FILENO, ph3, strlen(ph3));
+
+	//free
+	free_r();
+	free(local_addr);
+	free(serv_addr);
+	free(yolo);
+	free(def);
+	
+	return 0;
+}
+
+

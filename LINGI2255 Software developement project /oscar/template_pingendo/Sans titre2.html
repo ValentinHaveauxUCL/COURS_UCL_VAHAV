@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="Sans titre2.css" type="text/css"> </head>
+
+<body>
+  <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="fa d-inline fa-lg fa-cloud"></i><b>  Brand</b></a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+      <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fa d-inline fa-lg fa-bookmark-o"></i> Bookmarks</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fa d-inline fa-lg fa-envelope-o"></i> Contacts</a>
+          </li>
+        </ul>
+        <a class="btn navbar-btn ml-2 text-white btn-secondary"><i class="fa d-inline fa-lg fa-user-circle-o"></i> Sign in</a>
+      </div>
+    </div>
+  </nav>
+  <!-- NAVBAR -->
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a href="#" class="active nav-link"><i class="fa fa-home fa-home"></i>&nbsp;Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-target="#myModal3" data-toggle="modal">Exercices creation</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" data-target="#myModalTestCreation" data-toggle="modal">Tests creation</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- TABLEAUX EXERCICE -->
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Date creation</th>
+          <th>Preview</th>
+          <th>Level</th>
+          <th>Solution</th>
+          <th>Type</th>
+          <th>Hide</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>10/10/2017</td>
+          <td>5X + 25 = 10</td>
+          <td>
+            <input type="text" placeholder="1"> </td>
+          <td>-3</td>
+          <td>Equation</td>
+          <td>
+            <input type="checkbox" checked="checked" value="on"> </td>
+          <td>
+            <a class="btn btn-primary" href="">Edit</a>
+          </td>
+          <td>
+            <a class="btn btn-primary btn-danger" href="">Delete</a>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>11/10/2017</td>
+          <td>4X - 5 &gt; -3X + 9</td>
+          <td>
+            <input type="text" placeholder="3"> </td>
+          <td>2</td>
+          <td>Inequation</td>
+          <td>
+            <input type="checkbox" value="on"> </td>
+          <td>
+            <a class="btn btn-primary" href="">Edit</a>
+          </td>
+          <td>
+            <a class="btn btn-primary btn-danger" href="">Delete</a>
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>12/10/2017</td>
+          <td>20X + 2 = 22</td>
+          <td>
+            <input type="text" placeholder="2"> </td>
+          <td>1</td>
+          <td>Equation</td>
+          <td>
+            <input type="checkbox" checked="checked" value="on"> </td>
+          <td>
+            <a class="btn btn-primary" href="">Edit</a>
+          </td>
+          <td>
+            <a class="btn btn-primary btn-danger" href="">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row"> </div>
+    </div>
+    <!-- TABLEAUX Cours -->
+    <div class="container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Nbr Sections</th>
+            <th>Nbr Exercises</th>
+            <th>Visibility</th>
+            <th>Deadline</th>
+            <th>Teach</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Algebraic expression 1</td>
+            <td>3</td>
+            <td>15</td>
+            <td>
+              <input type="checkbox" checked="checked" value="on">
+            </td>
+            <td>11/12/2017</td>
+            <td>Pierre Lambert </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Algebraic expression 2</td>
+            <td>3</td>
+            <td>12</td>
+            <td>
+              <input type="checkbox" checked="checked" value="on">
+            </td>
+            <td>31/12/2017</td>
+            <td>Florian Indot </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Algebraic expression 3</td>
+            <td>4</td>
+            <td>20</td>
+            <td>
+              <input type="checkbox" checked="checked" value="on">
+            </td>
+            <td>13/06/2018</td>
+            <td>Pierre Lambert </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="contenair">
+      <!-- Button trigger modal -->
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Creation algebraic expressions</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+            </div>
+            <div class="modal-body">
+              <p>What kind of algebraic expression do you want to create ?&nbsp;</p>
+              <div class="row">
+                <div class="col-md-6">
+                  <a class="btn btn-primary btn-block btn-lg" href="">Equation</a>
+                </div>
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal3"> Inequation </button>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary">Next</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal 3-->
+    <div class="modal fade" aria-labelledby="myModalLabel" id="myModal3" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Exercice creation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+          </div>
+          <div class="modal-body">
+            <p>Create your equation / inequation only on one or both side of the equation</p>
+            <div class="row">
+              <div class="col-md-6">
+                <h2 class="">Choose variable</h2>
+              </div>
+              <div class="col-md-6">
+                <div class="btn-group btn-group-lg w-100">
+                  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> X</button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#"> X</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">A</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">B</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="text-center">-------------------------------------------------------------------------------------------------</p>
+            <div class="row">
+              <div class="col-md-6">
+                <a href="#" class="btn btn-outline-primary btn-block btn-lg">Write left side</a>
+              </div>
+              <div class="col-md-6">
+                <a href="#" class="btn btn-outline-primary btn-block btn-lg">Write right slide</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="blockquote">
+                  <p class="text-center">---------------------------------------------------------------------------------</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <h4 class="">Term with variable :</h4>
+              </div>
+              <div class="col-md-4">
+                <div class="col-md-12">
+                  <input placeholder="Only integer" class="form-control" name="password">
+                  <br> </div>
+              </div>
+              <div class="col-md-4">
+                <a class="btn btn-primary btn-block btn-lg" href="">ADD</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <h4 class="">Term without variable :</h4>
+              </div>
+              <div class="col-md-4">
+                <div class="col-md-12">
+                  <input placeholder="Only integer" name="termWithVariable" class="form-control">
+                  <br> </div>
+              </div>
+              <div class="col-md-4">
+                <a class="btn btn-primary btn-block btn-lg" href="">ADD</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <h4 class="">Choose operator :</h4>
+              </div>
+              <div class="col-md-4" align="center">
+                <div class="btn-group btn-group-lg">
+                  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> + </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#"> + </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#"> - </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#"> * </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#"> / </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <a class="btn btn-primary btn-block btn-lg" href="">ADD</a>
+              </div>
+            </div>
+            <p class="text-center">-----------------------------------------------------------------------------------------------</p>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-5">
+                <input name="password" class="form-control">
+                <br> </div>
+              <div class="col-md-2" align="center">
+                <div class="btn-group btn-group-lg">
+                  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> = </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#"> = </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#"> &gt; </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#"> &lt; </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <input name="password" class="form-control">
+                <br> </div>
+            </div>
+            <p class="text-center">-----------------------------------------------------------------------------------------------</p>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h4 class="">Solution:</h4>
+              </div>
+              <div class="col-md-6">
+                <input name="password" class="form-control">
+                <br> </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Clear</button>
+          <button type="button" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL TEST CREATION -->
+    <div class="modal fade" id="myModalTestCreation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Test Creation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h3 class="">Test title : </h3>
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Title"> </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <h3 class="">Number of parts : </h3>
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Only number"> </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" data-target="#myModalTestCreation2" data-toggle="modal">Next</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL TEST CREATION partie2 -->
+    <div class="modal fade" aria-labelledby="myModalLabel" id="myModalTestCreation2" role="dialog" tabindex="-1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Algebraic mod 1</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="container">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Index</th>
+                      <th>Title part</th>
+                      <th>Number of exercices</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        <input type="text" placeholder="Title"> </td>
+                      <td>
+                        <input type="text" placeholder="Only number"> </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>
+                        <input type="text" placeholder="Title"> </td>
+                      <td>
+                        <input type="text" placeholder="Only number"> </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>
+                        <input type="text" placeholder="Title"> </td>
+                      <td>
+                        <input type="text" placeholder="Only number"> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Previous</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" data-target="#myModalTestCreation3" data-toggle="modal">Next</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL TEST CREATION partie3 -->
+    <div class="modal fade" id="myModalTestCreation3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Equation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="container">
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Type filter <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="#">Equation</a>
+                    </li>
+                    <li>
+                      <a href="#">Inequation</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="container">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Index</th>
+                      <th>Preview</th>
+                      <th>Level</th>
+                      <th>Solution</th>
+                      <th>Type</th>
+                      <th>Select</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>5X + 25 = 10</td>
+                      <td> 1 </td>
+                      <td>-3</td>
+                      <td>Equation</td>
+                      <td>
+                        <input type="checkbox" value="on"> </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>4X - 5 &gt; -3X + 9</td>
+                      <td> 3 </td>
+                      <td>2</td>
+                      <td>Inequation</td>
+                      <td>
+                        <input type="checkbox" value="on"> </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>20X + 2 = 22</td>
+                      <td> 2 </td>
+                      <td>1</td>
+                      <td>Equation</td>
+                      <td>
+                        <input type="checkbox" value="on"> </td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>32X + 2 = 66</td>
+                      <td> 2 </td>
+                      <td>2</td>
+                      <td>Equation</td>
+                      <td>
+                        <input type="checkbox" value="on"> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Previous</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" data-target="#myModalTestCreation4" data-toggle="modal">Next</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL TEST CREATION partie4 -->
+    <div class="modal fade" id="myModalTestCreation4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Equation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Type filter <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href="#">Equation</a>
+                        </li>
+                        <li>
+                          <a href="#">Inequation</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-md-6 align-self-end text-right">
+                    <h4> Count = 3 </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="container">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Index</th>
+                      <th>Preview</th>
+                      <th>Level</th>
+                      <th>Solution</th>
+                      <th>Type</th>
+                      <th>Select</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>5X + 25 = 10</td>
+                      <td> 1 </td>
+                      <td>-3</td>
+                      <td>Equation</td>
+                      <td>
+                        <input type="checkbox" value="on"> </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>20X + 2 = 22</td>
+                      <td> 2 </td>
+                      <td>1</td>
+                      <td>Equation</td>
+                      <td>
+                        <input type="checkbox" value="on"> </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>32X + 2 = 66</td>
+                      <td> 2 </td>
+                      <td>2</td>
+                      <td>Equation</td>
+                      <td>
+                        <input type="checkbox" value="on"> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Previous</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" data-target="#myModalTestCreation4" data-toggle="modal">Next</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+  </div>
+</body>
+
+</html>
