@@ -630,3 +630,4 @@ Ubuntu 16.04.3 LTS ubuntu-xenial ttyS0
 
 ubuntu-xenial login: [   36.456487] cloud-init[1712]: Cloud-init v. 0.7.9 running 'modules:final' at Thu, 02 Nov 2017 13:54:47 +0000. Up 36.09 seconds.
 [   36.457445] cloud-init[1712]: Cloud-init v. 0.7.9 finished at Thu, 02 Nov 2017 13:54:48 +0000. Datasource DataSourceNoCloud [seed=/dev/sdb][dsmode=net].  Up 36.44 seconds
+[76456.704385] systemd[1]: snap-repair.timer: Unit to trigger vanished.
