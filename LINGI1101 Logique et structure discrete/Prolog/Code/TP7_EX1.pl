@@ -1,0 +1,1 @@
+criminal(X) :- american(X), weapon(Y), sells(X, Y, Z), hostile(Z).
