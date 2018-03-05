@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <title>ic_navbar_a_propos_btn_1</title>
+  <g>
+    <path d="M200,100A100,100,0,0,0,0,100V200H100A100,100,0,0,0,200,100Z" fill="#dd3fea"/>
+    <line x1="97.3" y1="81.08" x2="97.3" y2="151.35" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"/>
+    <line x1="97.3" y1="48.65" x2="97.3" y2="59.46" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"/>
+  </g>
+</svg>

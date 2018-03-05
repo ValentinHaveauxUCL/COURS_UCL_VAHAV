@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.73 122.73">
+  <title>Pr4Grp3UclSportBackMenuBtnFichier 2</title>
+  <g id="Calque_2" data-name="Calque 2">
+    <g id="Calque_1-2" data-name="Calque 1">
+      <circle cx="61.36" cy="61.36" r="61.36" style="fill: #733e92"/>
+      <path d="M99.47,38.87V83.81a7.34,7.34,0,0,1-7,7.41H30.38a7.38,7.38,0,0,1-7.08-7.41V38.87a6.79,6.79,0,0,1,7.08-6.71h6.81v4.07a5,5,0,1,0,9.93,0V32.16H75.65v4.07a5,5,0,1,0,9.93,0V32.16h6.85A6.75,6.75,0,0,1,99.47,38.87Z" style="fill: #fff"/>
+      <rect x="29.25" y="52.56" width="64.32" height="32.01" style="fill: #733e92"/>
+      <g>
+        <rect x="33.72" y="57.46" width="9.52" height="9.52" style="fill: #fff"/>
+        <rect x="49" y="57.46" width="9.52" height="9.52" style="fill: #fff"/>
+        <rect x="64.28" y="57.46" width="9.52" height="9.52" style="fill: #fff"/>
+        <rect x="79.57" y="57.46" width="9.52" height="9.52" style="fill: #fff"/>
+      </g>
+      <g>
+        <rect x="33.72" y="70.92" width="9.52" height="9.52" style="fill: #fff"/>
+        <rect x="49" y="70.92" width="9.52" height="9.52" style="fill: #fff"/>
+        <rect x="64.28" y="70.92" width="9.52" height="9.52" style="fill: #fff"/>
+        <rect x="79.57" y="70.92" width="9.52" height="9.52" style="fill: #fff"/>
+      </g>
+      <rect x="39.29" y="27.76" width="5.74" height="11.15" rx="2.87" ry="2.87" style="fill: #fff"/>
+      <rect x="77.65" y="27.76" width="5.74" height="11.15" rx="2.87" ry="2.87" style="fill: #fff"/>
+    </g>
+  </g>
+</svg>

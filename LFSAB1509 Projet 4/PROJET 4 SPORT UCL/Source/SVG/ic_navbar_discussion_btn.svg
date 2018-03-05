@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 195.43">
+  <title>ic_navbar_discussion_btn_1</title>
+  <g>
+    <path d="M0,78.39C0,35.09,44.78,0,100,0S200,35.09,200,78.39c0,39.51-37.28,72.18-85.76,77.6l22.33,39.44-42.76-38.8C41.47,154.12,0,120.06,0,78.39Z" fill="#42b3ff"/>
+    <circle cx="137.71" cy="77.88" r="11.63" transform="translate(-10.7 23.06) rotate(-9.22)" fill="#fff"/>
+    <circle cx="100" cy="77.88" r="11.63" transform="translate(-25.78 93.52) rotate(-45)" fill="#fff"/>
+    <circle cx="62.29" cy="77.88" r="11.63" transform="translate(-36.82 66.86) rotate(-45)" fill="#fff"/>
+  </g>
+</svg>

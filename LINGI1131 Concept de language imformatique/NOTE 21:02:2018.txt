@@ -1,0 +1,319 @@
+--Note du cours de "Concept de language informatique"
+-- 21 Février 2018
+-- LINGI 1131
+-- Valentin Haveaux
+
+Contenu du cours: ° Deterministic dataflow
+                    (chapitre 4 du cours)
+                    1)
+                      --> Single assignement varaiables
+                      --> Partial values
+                      --> dataflow principe
+                    2)
+                      --> Concurrencu and threads
+                      --> Semanties
+                      --> Execution tree
+                    3)
+                      --> Streams
+                      --> Ping-pong example
+                      --> Agents
+
+° dataflow
+  - variability of data
+          _________
+      --> |       |   -->
+      --> |       |
+    data  ---------
+          Operation
+
+  - Single assignement
+                            memory
+    [ Declare            ###################
+    [ X  ------------------>x              #
+                         #                 #
+                         #                 #
+                         ###################
+  - Potentiel values -->
+    Value --> instant
+              L=[1 2 3]
+
+  - Dataflow concept
+
+    Statement exec
+    | | | | |
+    v v v v v
+    ________
+    declare ] addition "X" wairs for X
+    Y=X+1   ]
+      |
+      |
+      v
+    unbound
+
+  - Activity or "thread"
+    - statement in Execution
+    - statement can wait if data is unavailable   --> Continues when data becomes available
+    - Multiple statement in exec program
+
+  X=100   --> statement exec
+
+
+    declare
+    X
+    {Browse X}
+    X=100
+    X=101
+
+    declare A B C L in
+    L=[A B C]
+    {Browse L}
+
+    declare X Y in
+    Y=X+1
+    {Browse Y}
+
+    X=999
+
+  - threads
+    - thread = statement in execution
+    - thread <s> end  create a new thread
+    - multiple threads --> all execute "simultanely"
+    - execution uses 'interleaning semantics'
+                  S0 S1 S2 S3 <-- steps
+      thread T0 --|--|--|--|--|--> time
+
+                  S0° S1° S2° S3°
+      thread T1 --|---|---|---|--|-->
+
+  - System
+    - execution both threads  ] eany do reason
+    - one sequence of steps   ] about concurrent execution
+       S0  S0° S1° S1 S2° S2  S3
+    ---|---|---|---|--|---|---|--|-->
+
+    - Concurrency does not imply paralletion
+      (multiple threads)    (true simult execution)
+      large var number      small, fixed
+      no.                   no.
+
+    - every Step: choice of whitch thread
+    - two instances varaiables
+      - 2 execution of trame program can have different arder of steps
+      - results of program? Might be different!!!
+      - Advantage of data dataflow:
+          #######################
+          ## PAS REUSSI A LIRE ##
+          ##   DEUX AVANTAGES  ##
+          #######################
+
+  - Execution tree
+    - Show all possible execution
+      (all possible choices of schedules)
+  ######################
+  #  declare A B C in  #
+  #  thread A=1 end    #
+  #  thread B=2 end    #
+  #  thread C=A+B end  #
+  ######################
+
+  inght ######################  memory
+        #  declare A B C in  #
+        #  thread A=1 end    #
+        #  thread B=2 end    #
+        #  thread C=A+B end  #
+   T0   ######################
+                || Step 1
+                VV
+        ######################
+          then A=1 end          {a,b,c}
+          then
+          then
+  T0    ######################
+                ||
+                VV
+        ######################
+  T1      A=1                   {a,b,c}
+        ######################
+                ||
+                VV
+        ######################
+         then
+  T0     then
+        ######################
+          //                \\
+        vv                   vv
+    ###########             ############
+    then        {a=1,b,c}    A=1
+    then                  T1############
+ T1 ###########             ############    {a,b,c}
+                             B=2
+                          T2############
+                            ############
+                            then C=A+B
+                          T0############
+                            //  ||  \\
+            -----------------   ||   -----------------
+            |                   ||                   |
+            V                   VV                   V
+                                                T1  A=1
+                                                T2  B=2     {a,b,c}
+                                                T3  C=A+B
+                                                ############
+                                                  //  ||  \\
+                                  -----------------   ||   -----------------
+                                  |                   ||                   |
+                                  V                   VV                   V
+                                                                      T1  A=1
+                                                                      T2  B=2     {a,b,c}
+                                                                      T3  C=A+B
+                                                                      ############
+                                                                        //      \\
+                                                        -----------------        -----------------
+                                                        |                                        |
+                                                        V                                        V
+                                                    T2 B=2
+                                                    T3 C=A+B  {a=1,b,c}
+                                                    ############
+                                                        |
+                                                        |
+                                                        V
+                                                    T3 C=A+B  {a=1,b=2,c}
+                                                    ############
+                                                        |
+                                                        |
+                                                        V
+                                                    {a=1,b=2,c=3}   termination
+    ###############################
+    ## COMPLETETER AVEC LA PHOTO ##
+    ###############################
+
+  - Stream
+    - list with unbound tail
+    - L = 1|2|L2
+      L2 = 3|4|L3     [communication channel
+      L3 = 5|6|L4
+          ...
+
+    %Stream
+    %List xith unbound tail
+    declare L1 L2 in
+    L1=1|2|3|L2
+    {Browse L1}
+
+    declare L3 in
+    L2=4|5|6|L3
+
+    %Display elements of a Stream
+    declare
+    proc {Disp S}
+      case S of E|S2 then
+        {Browse E}
+        {Disp S2}
+      [] nil then
+        skip
+      end
+    end
+
+    {Disp L1}
+
+    declare L4 in
+    L3=7|8|9|L4
+
+    L4=10|nil
+
+  - Ping-pong
+    - thread 1: display 'ping'
+                repeatealy
+    - thread 2: display 'pong'
+                repeatealy
+
+    - problem: alternate
+               ping and pong
+    - how should the threads do ...?
+
+    - Naive solution
+      - timer
+        {Delay D}; inctinction do schulder "Don t choose me for D ms"
+
+    - Better solution
+      - threads communicate --> with (steaming)?
+
+    %Ping-pong example
+
+    %First solution using timer
+    declare
+    proc {Ping D}
+      {Delay D}
+      {Browse ping}
+      {Ping D}
+    end
+
+    proc {Pong D}
+      {Delay D}
+      {Browse pong}
+      {Pong D}
+    end
+
+    %Let's try making them alternate this way
+    thread {Ping 500} end
+    thread {Pong 500} end
+
+    %problem: not *garanteed* they will alternate!
+    %Only way is for the threads to communicate
+
+    %Better solution threads communicate
+    declare
+    fun {Ping S}
+      {Delay 250}
+      case S of ok|T then
+        {Browse ping}
+        ok|{Ping T}
+      end
+    end
+
+    fun {Pong S}
+      {Delay 250}
+      case S of ok|T then
+        {Browse pong}
+        ok|{Pong T}
+      end
+    end
+
+    declare S1 S2 in
+    thread S2={Ping ok|S1} end
+    thread S1={Pong S2} end
+
+
+
+
+    -Agent (pipeline example)
+      - threads with m input stream and n output stream
+
+    %pipeline example
+    declare
+    fun {Ints N}
+      {Delay 500}
+      N|{Ints N+1}
+    end
+
+    {Browse {Map [1 2 3] fun {$ X} X*X end}}
+
+    %pipeline with Map as transformer:
+    declare S1 S2 in
+    thread S1={Ints 1} end
+    thread S2={Map S1 fun {$ X} X*X end} end
+    thread {Disp S2} end
+
+    %Agent with two inpurs
+    declare
+    fun {Add S1 S2}
+      case S1|S2 of (E1|T1)|(E2|T2) then
+        (E1+E2)|{Add T1 T2}
+      end
+    end
+
+    declare S1 S2 S3 in
+    thread S1={Ints 1} end
+    thread S2={Map S1 fun {$ X} X*X end} end
+    thread S3={Add S1 S2} end
+    thread {Disp S3} end 

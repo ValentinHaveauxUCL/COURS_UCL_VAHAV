@@ -1,0 +1,18 @@
+-- CALCULABILITE
+-- TP1 22/02/2018
+-- VALENTIN HAVEAUX
+
+--EXERCICE1
+    A)
+        A1 X A2 countable
+        
+            |   A11 A12 A13 A14 ...
+        ------------------------
+        A21 |    X   X   X   X
+        A22 |    X   X   X   X
+        A23 |    X   X   X   X
+        A24 |    X   X   X   X
+        ... |
+        
+    B)
+        

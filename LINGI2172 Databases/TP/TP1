@@ -85,10 +85,12 @@ http://wiki.c2.com/?QueryLanguageComparison
   (For instance, a result could be {Belgium, France}.) Make sure that every pair of
   neighbouring countries is only included once.
 
-  --SQL rgb(255,0,0) NO GOOD
-    SELECT *
-    FROM Borders, Country
-    WHERE country1 = "B" AND Borders.country1 = Country.code
+  --SQL rgb(128,255,0)
+  SELECT C1.name, C2.name
+FROM borders, Country C1, Country C2
+WHERE country1 < country2
+  AND country1 = C1.code 
+  AND country2 = C2.code
 
 --EXERCICE 9
   List the name of the countries that do not have mountains.

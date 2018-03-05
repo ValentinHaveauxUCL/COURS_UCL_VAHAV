@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205 156.86">
+  <title>ic_navbar_deconnexion_btn_1</title>
+  <g>
+    <path d="M2.5-616.17v63A47.53,47.53,0,0,1-45-505.64H-150a47.53,47.53,0,0,1-47.53-47.53v-63" transform="translate(200 660)" fill="none" stroke="#80d25b" stroke-miterlimit="10" stroke-width="5"/>
+    <line x1="102.5" y1="96.47" x2="102.5" y2="6.99" fill="none" stroke="#80d25b" stroke-miterlimit="10" stroke-width="5"/>
+    <polyline points="72.73 33.31 102.5 3.54 132.27 33.31" fill="none" stroke="#80d25b" stroke-miterlimit="10" stroke-width="5"/>
+  </g>
+</svg>
