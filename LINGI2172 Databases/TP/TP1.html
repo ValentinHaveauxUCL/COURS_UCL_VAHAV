@@ -828,13 +828,13 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 <body style="min-width: 200px; max-width: 790px; margin: 0 auto; padding: 30px; overflow: auto;"class="markdown-body">
 <h1 id="lingi2172-databases-tp1">LINGI2172 Databases TP1</h1>
 <p><em>Haveaux Valentin</em></p>
-<h2 id="question-1">Question 1</h2>
+<h3 id="question-1">Question 1</h3>
 <p>List the names of all the countries.</p>
-<h3 id="sql">SQL</h3>
+<h4 id="sql">SQL</h4>
 <pre><code class="lang-SQL"><span class="hljs-built_in">SELECT</span> <span class="hljs-built_in">name</span>
 <span class="hljs-keyword">FROM</span> Country
 </code></pre>
-<h3 id="tutorial-d">TUTORIAL D</h3>
+<h4 id="tutorial-d">TUTORIAL D</h4>
 <pre><code class="lang-Rel">Country {<span class="hljs-property">name</span>}
 </code></pre>
 <h2 id="question-2">Question 2</h2>
@@ -876,7 +876,11 @@ relation with one attribute called language</p>
 <span class="hljs-keyword">WHERE</span> Independence.country = Country.code</span>
 </code></pre>
 <h3 id="tutorial-d">TUTORIAL D</h3>
-<pre><code class="lang-Rel"><span class="hljs-list">(<span class="hljs-keyword">Independence</span> JOIN Country WHERE country = code)</span> <span class="hljs-collection">{name, independence}</span>
+<pre><code class="lang-Rel">(Independence <span class="hljs-built_in">JOIN</span> Country WHERE country = code) {<span class="hljs-built_in">name</span>, independence}
+
+<span class="hljs-built_in">OR</span> (FASTER)
+
+(Country <span class="hljs-built_in">JOIN</span> (Independence RENAME {country as code})) {<span class="hljs-built_in">name</span>, independence}
 </code></pre>
 <h2 id="question-6">Question 6</h2>
 <p>List all countries which are on two different continents. The result must be a relation
@@ -887,7 +891,11 @@ defined with 3-tuple attributes {name, percentage, continent} where name is the 
 <span class="hljs-keyword">WHERE</span> percentage != <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> Country.code = Encompasses.country</span>
 </code></pre>
 <h3 id="tutorial-d">TUTORIAL D</h3>
-<pre><code class="lang-Rel"><span class="hljs-list">(<span class="hljs-keyword">Country</span> JOIN Encompasses WHERE  NOT <span class="hljs-list">(<span class="hljs-keyword">percentage</span> = <span class="hljs-number">100.0</span>)</span> AND code = country)</span> <span class="hljs-collection">{name, percentage, continent}</span>
+<pre><code class="lang-Rel">(Country <span class="hljs-keyword">JOIN</span> Encompasses <span class="hljs-keyword">WHERE</span>  <span class="hljs-keyword">NOT</span> (percentage = <span class="hljs-number">100.0</span>) <span class="hljs-keyword">AND</span> code = country) <span class="hljs-comment">{name, percentage, continent}</span>
+
+<span class="hljs-keyword">OR</span> (FASTER)
+
+((Country <span class="hljs-keyword">JOIN</span> (Encompasses RENAME <span class="hljs-comment">{country as code}</span>)) <span class="hljs-keyword">WHERE</span> percentage &lt;&gt; <span class="hljs-number">100.0</span>) <span class="hljs-comment">{name, percentage, continent}</span>
 </code></pre>
 <h2 id="question-7">Question 7</h2>
 <p>List the Swiss mountains with a height between 4400 and 4500. The result must
@@ -901,6 +909,10 @@ be a relation composed of 2-tuples with attributes {mountain, height}.</p>
 </code></pre>
 <h3 id="tutorial-d">TUTORIAL D</h3>
 <pre><code class="lang-Rel">(Mountain <span class="hljs-keyword">Join</span> GeoMountain <span class="hljs-keyword">WHERE</span> country = <span class="hljs-string">'CH'</span> <span class="hljs-keyword">AND</span> name = mountain <span class="hljs-keyword">AND</span> height &gt; <span class="hljs-number">4400.0</span> <span class="hljs-keyword">AND</span> height &lt; <span class="hljs-number">4500.0</span>) <span class="hljs-comment">{mountain, height}</span>
+
+<span class="hljs-keyword">OR</span> (FASTER)
+
+((Mountain RENAME <span class="hljs-comment">{name as mountain}</span> <span class="hljs-keyword">JOIN</span> (GeoMountain)) <span class="hljs-keyword">WHERE</span> (country = <span class="hljs-string">'CH'</span> <span class="hljs-keyword">AND</span> height &gt; <span class="hljs-number">4400.0</span> <span class="hljs-keyword">AND</span> height &lt; <span class="hljs-number">4500.0</span>)) <span class="hljs-comment">{mountain, height}</span>
 </code></pre>
 <h2 id="question-8">Question 8</h2>
 <p>List all pairs of neighbouring countries. The result must be a relation composed of
@@ -978,7 +990,8 @@ relation composed by a 1-tuple attribute {cnt}.</p>
 <span class="hljs-keyword">FROM</span> EthnicGroup</span>
 </code></pre>
 <h3 id="tutorial-d">TUTORIAL D</h3>
-<pre><code class="lang-Rel">
+<p>rgb(255,10,40)</p>
+<pre><code class="lang-Rel">COUNT(EthnicGroup {<span class="hljs-property">name</span>} RENAME {<span class="hljs-property">name</span> <span class="hljs-keyword">as</span> cnt})
 </code></pre>
 <h2 id="question-13">Question 13</h2>
 <p>List the names of the countries where the citizens speak at least 3 languages.

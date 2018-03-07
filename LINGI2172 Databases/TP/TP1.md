@@ -64,6 +64,10 @@ WHERE Independence.country = Country.code
 ### TUTORIAL D
 ```Rel
 (Independence JOIN Country WHERE country = code) {name, independence}
+
+OR (FASTER)
+
+(Country JOIN (Independence RENAME {country as code})) {name, independence}
 ```
 
 ## Question 6
@@ -78,6 +82,10 @@ WHERE percentage != 100 AND Country.code = Encompasses.country
 ### TUTORIAL D
 ```Rel
 (Country JOIN Encompasses WHERE  NOT (percentage = 100.0) AND code = country) {name, percentage, continent}
+
+OR (FASTER)
+
+((Country JOIN (Encompasses RENAME {country as code})) WHERE percentage <> 100.0) {name, percentage, continent}
 ```
 
 ## Question 7
@@ -94,6 +102,10 @@ WHERE GeoMountain.country = 'CH'
 ### TUTORIAL D
 ```Rel
 (Mountain Join GeoMountain WHERE country = 'CH' AND name = mountain AND height > 4400.0 AND height < 4500.0) {mountain, height}
+
+OR (FASTER)
+
+((Mountain RENAME {name as mountain} JOIN (GeoMountain)) WHERE (country = 'CH' AND height > 4400.0 AND height < 4500.0)) {mountain, height}
 ```
 
 ## Question 8
@@ -185,8 +197,9 @@ SELECT count(
 FROM EthnicGroup
 ```
 ### TUTORIAL D
+rgb(255,10,40)
 ```Rel
-
+COUNT(EthnicGroup {name} RENAME {name as cnt})
 ```
 
 ## Question 13

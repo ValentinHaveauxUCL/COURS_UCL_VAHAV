@@ -1,0 +1,348 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\date{}
+
+\begin{document}
+
+\hypertarget{note-du-cours-de-concept-de-language-informatique}{%
+\section{Note du cours de ``Concept de language
+informatique''}\label{note-du-cours-de-concept-de-language-informatique}}
+
+\emph{07 Mars 2018} \emph{LINGI 1131} \emph{Valentin Haveaux}
+
+\hypertarget{note-tierce}{%
+\subsubsection{Note tierce}\label{note-tierce}}
+
+\begin{quote}
+Le prof veut faire une intero comme il l'avait fait pour le cours de
+logique. Il a demandé que les délégués lui envoie la date qui
+conviendrait le mieux (sans doute dans 2 semaines).
+\end{quote}
+
+\hypertarget{contenu-du-cours}{%
+\subsection{Contenu du cours}\label{contenu-du-cours}}
+
+\begin{itemize}
+\tightlist
+\item
+  Lazy suspensions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Hamming problem
+  \item
+    Lazy Quicksort
+  \end{itemize}
+\item
+  Declarative concurrency
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What is declarative concurrency?
+  \item
+    Limitations of declarative conc.
+  \end{itemize}
+\item
+  Message-passing concurrency
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ports
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{lazy-suspensions}{%
+\subsection{Lazy suspensions}\label{lazy-suspensions}}
+
+\begin{verbatim}
+Fun lazy {F X}                          Z = {F X}
+    <e>                                 --> Create a thread
+end
+    |
+    |                                   
+    V
+proc {F X R}                            Z lazy suspension
+    thread                                  {F X}
+        {WaithNeeded R}
+        R = <e>
+    end
+end
+\end{verbatim}
+
+\hypertarget{hamming-problem}{%
+\subsubsection{Hamming problem}\label{hamming-problem}}
+
+\begin{itemize}
+\item
+  Generate stream of integers
+
+\begin{verbatim}
+  a b c
+  2 3 5
+  a,b,c >= 0
+\end{verbatim}
+
+  in invesing order
+\item
+  Start with 1 1 2 3 4 5 6 8 9 10 12 \ldots{}
+\item
+  Lenght of stream \textbf{not know in advence}
+\end{itemize}
+
+idea: generate infinite stream \textbf{lazily}
+
+\begin{verbatim}
+H = 1|.........|hi|......|hn|.......
+                           |    |
+                           |    V
+                           V    hn + 1 ?
+                        last to fan
+
+
+             ______________________________________
+            |          ____________________________|
+            |         |          __________________|
+            | 5*h2    | 3*h2    | 2*h2             |
+            V         V         V                  |
+#############################################  #########
+# 1 #######   #######   #######   #######   #  ###   ###
+#############################################  #########
+ho                                         hn    hn+1
+\end{verbatim}
+
+\begin{verbatim}
+%Hamming problem
+declare
+H=1|{Merge {Times H 2}}
+    {Merge {Times H 3} {Times H 5}}}
+    
+{Browse H}
+{Browse H.2.1}
+
+declare
+proc {Touch H N}
+    if N==0 then skip
+    else {Touch H.2 N-1}
+    end
+end
+
+{Touch H 5}
+{Touch H 10}
+{Touch H 100}
+{Touch H 500}
+
+declare
+fun lazy {Times H N}
+    case H of E|H2 then E*N|{Times H2 N} end
+end
+
+declare
+fun lazy {Merge S1 S2}
+    case S1|S2
+    of (E1|T1)|(E2|T2) then
+        if E1<E2 then
+            E1|{Merge T1 S2}
+        elseif E1>E2 then
+            E2|{Merge S1 T2}
+        else /* E1==E2 */
+            E1|{Merge T1 T2}
+        end
+    end
+end
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Start execution
+\end{itemize}
+
+\begin{quote}
+H = 1 \textbar{} H' ---\textgreater{} \{Times H 2\} ---\textgreater{}
+Lazy suspension \textbar{} \textbar{} ---\textgreater{} \{Merge . .\}
+\textbar{} ---\textgreater{} \{Times H 3\} \textbar{} \textbar{}
+---\textgreater{} \{Merge . .\} \textbar{} \textbar{} ---\textgreater{}
+\{Times H 5\}
+\end{quote}
+
+\begin{quote}
+\hypertarget{h}{%
+\subsection{H'}\label{h}}
+
+\{Browse H.2.1\} (second element) -\textgreater{} H' needed \textbar{} a
+activating\\
+-\textgreater{} execute \{Merge S1 S2\} \textbar{} the lazy expression
+-\textgreater{} body: case S1\textbar{}S2 of
+(E1\textbar{}T1)\textbar{}(E2\textbar{}T2) then \ldots{}. \textbar{}
+\textbar{}\\
+end V \textbar{} need S1 V need S2
+\end{quote}
+
+\hypertarget{lazy-quicksort}{%
+\subsubsection{Lazy Quicksort}\label{lazy-quicksort}}
+
+\begin{itemize}
+\item
+  Quicksort
+
+\begin{verbatim}
+          ########################
+          # X #                  #  L
+          ########################
+              |           |
+              |           |
+              V           V
+      #############   #############
+   L1 #           # L2#           #
+      #############   #############
+      all elem < X     all elem >= X
+          |                 |
+          V  Q              V  Q
+      #############   #############
+   S1 #           # S2#           #
+      #############   #############
+        sorted            sorted
+              |           |
+              |           |
+              V           V
+          #######################
+       S  # # # # # # # # # # # #  
+          #######################
+\end{verbatim}
+\end{itemize}
+
+\begin{verbatim}
+%Quicksort
+
+%Partition
+declare
+proc {Partition L X L1 L2}
+    case L of Y|M then
+        if Y<X then M1 in
+            L1=Y|M1 {Partition M X M1 L2}
+        else M2 in
+            L2=Y|M2 {Partition M X L1 M2}
+        end
+    [] nil then L1=nil L2=nil
+    end
+end
+
+declare L L1 L2 in
+L=[2 7 5 6 4 5 4 3 5]
+{Partition L 4 L1 L2}
+{Browse L1}
+{Browse L2}
+
+% First version
+/*
+declare 
+fun {Append L1 L2}
+    case L1 of X|M1 then X|{Append M1 L2}
+    [] nil then L2 end
+end
+
+declare
+fun {Quicksort L}
+    case L of X|M then L1 L2 S1 S2 in
+        {Partition M X L1 L2}
+        S1={Quicksort L1}
+        S2={Quicksort L2}
+        {Append S1 X|S2}
+    [] nil then nil
+    end
+end
+
+{Browse {Quicksort [6 5 3 78 45 43 2 1 65 4 7]}}
+*/
+
+
+% Lazy version
+
+declare 
+fun lazy {LAppend L1 L2}
+    case L1 of X|M1 then X|{LAppend M1 L2}
+    [] nil then L2 end
+end
+
+declare
+fun lazy {LQuicksort L}
+    case L of X|M then L1 L2 S1 S2 in
+        {Partition M X L1 L2}
+        S1={LQuicksort L1}
+        S2={LQuicksort L2}
+        {LAppend S1 X|S2}
+    [] nil then nil
+    end
+end
+
+declare L S in
+L=[3 6 2 5 1 7 0]
+S={Quicksort L}
+{Browse S}
+
+{Browse S.1}
+{Browse S.2.1}
+{Touch S 7}
+{Touch S 8}
+
+% Execution when I ask for least element
+declare L S in
+L=[]
+\end{verbatim}
+
+\end{document}
