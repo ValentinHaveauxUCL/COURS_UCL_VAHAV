@@ -101,11 +101,19 @@ WHERE GeoMountain.country = 'CH'
 ```
 ### TUTORIAL D
 ```Rel
-(Mountain Join GeoMountain WHERE country = 'CH' AND name = mountain AND height > 4400.0 AND height < 4500.0) {mountain, height}
+(Mountain Join GeoMountain 
+    WHERE country = 'CH' 
+        AND name = mountain 
+        AND height > 4400.0 
+        AND height < 4500.0) {mountain, height}
 
 OR (FASTER)
 
-((Mountain RENAME {name as mountain} JOIN (GeoMountain)) WHERE (country = 'CH' AND height > 4400.0 AND height < 4500.0)) {mountain, height}
+((Mountain RENAME {name as mountain} 
+    JOIN (GeoMountain)) 
+        WHERE (country = 'CH' 
+            AND height > 4400.0 
+            AND height < 4500.0)) {mountain, height}
 ```
 
 ## Question 8
@@ -263,8 +271,6 @@ FROM Borders
 ```
 ### TUTORIAL D
 ```Rel
-(Borders {country1, country2} RENAME {	country1 AS c1, 
-                                        country2 AS c2} ) 
-	NOT  MATCHING (Borders {country2, country1} RENAME {   country2 AS c1, 
-												           country1 AS c2})
+(Borders {country1, country2} RENAME {	country1 AS c1, country2 AS c2} ) 
+	NOT  MATCHING (Borders {country2, country1} RENAME { country2 AS c1, country1 AS c2})
 ```
