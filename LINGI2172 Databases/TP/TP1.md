@@ -197,9 +197,9 @@ SELECT count(
 FROM EthnicGroup
 ```
 ### TUTORIAL D
-rgb(255,10,40)
 ```Rel
-COUNT(EthnicGroup {name} RENAME {name as cnt})
+SUMMARIZE EthnicGroup {name}:
+	{cnt:=COUNT()}
 ```
 
 ## Question 13
@@ -216,7 +216,8 @@ HAVING   COUNT(country) >= 3
 ```
 ### TUTORIAL D
 ```Rel
-
+((((SUMMARIZE Language BY {country}: {cnt:=COUNT()} WHERE cnt>=3 )){country,cnt}) 
+		JOIN (Country RENAME {code as country})) {name,cnt}
 ```
 
 ## Question 14
@@ -236,7 +237,12 @@ WHERE L1.percentage IN (
 ```
 ### TUTORIAL D
 ```Rel
-
+((Language ){country,name}) 
+	NOT MATCHING (Language RENAME {	name AS name2, 
+				                    country AS country2,
+                                    percentage AS percentage2}  
+				JOIN Language WHERE country2=country  
+                                    AND percentage2>percentage)
 ```
 
 ## Question 15
@@ -257,5 +263,8 @@ FROM Borders
 ```
 ### TUTORIAL D
 ```Rel
-
+(Borders {country1, country2} RENAME {	country1 AS c1, 
+                                        country2 AS c2} ) 
+	NOT  MATCHING (Borders {country2, country1} RENAME {   country2 AS c1, 
+												           country1 AS c2})
 ```
