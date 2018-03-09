@@ -6,4 +6,8 @@ Sur ce github se trouve toutes les notes ainsi que les cours éffectuez à l'UCL
 
 **TOUT DROIT RESERVE**
 
+## PUSH AUTO
+MAJ AUTO $DATE
+    Ce type de push est exécuté toutes les minutes si il y a eu des modifications dans la branche
+
 
